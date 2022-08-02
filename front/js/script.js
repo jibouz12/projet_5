@@ -13,7 +13,7 @@ fetch('http://localhost:3000/api/products')
 // créer une card pour chaque produit
             let card = document.createElement("a");
             cardParent.appendChild(card);
-            card.setAttribute("href", "./product.html?id=" + i._id);
+            card.setAttribute("href", "./product.html?id="+ i._id +"&imageUrl="+ i.imageUrl +"&altTxt="+ i.altTxt +"&name="+ i.name +"&price="+ i.price +"&description="+ i.description +"&colors="+ i.colors);
             card.innerHTML = '<article><img src="'+ i.imageUrl +'"alt="'+ i.altTxt +'"><h3 class="productName">'+ i.name +'</h3><p class="productDescription">'+ i.description +'</p></article>';
     }
   })
