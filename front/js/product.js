@@ -2,12 +2,7 @@
 let adresse = new URL(window.location.href);
 let idProduit = adresse.searchParams.get("id");
 
-/** 
- * récupérer les infos du produit avec requête de type GET
- * @param { String } url
- * @param { Object } idProduit
- * @return { Promise }
- */  
+// récupérer les infos du produit avec requête de type GET
 fetch('http://localhost:3000/api/products/'+ idProduit)
     .then(function(res) {
         if (res.ok) {
@@ -48,3 +43,48 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
     .catch(function(err) {
         console.log("Une erreur est survenue"); 
     });
+
+// gestion du panier 
+let canap = [];
+
+// 
+/**
+ * sauvegarder panier dans localStorage
+ * @param {Objet} canap l'objet qu'on sauvegarde
+ */
+function saveLocal(canap) {
+    localStorage.setItem("canap", JSON.stringify(canap));
+}
+
+// récupérer du localStorage
+function getFromLocal() {
+    let canap = localStorage.getItem("canap");
+    if (canap == null) {
+        return [];
+    }else {
+        return JSON.parse(canap);
+    }
+}
+
+// ajout au panier
+function ajoutPanier(eventClic) {
+    let canap = getFromLocal();
+    let couleurSelect = document.getElementById('colors').value;
+    let produitExistant = canap.find(p => p.id == idProduit & p.color == couleurSelect);
+    if (produitExistant != undefined) {
+        let quantiteNum = parseInt(produitExistant.quantity);
+        let quantiteNumAdd = parseInt(document.getElementById('quantity').value);
+        produitExistant.quantity = quantiteNum + quantiteNumAdd;
+    }else {
+        let produit = {
+            id : idProduit, 
+            color : document.getElementById('colors').value,
+            quantity : document.getElementById('quantity').value
+        }
+        canap.push(produit);
+    }
+    saveLocal(canap);
+}
+
+// run fonction au clic
+document.getElementById("addToCart").addEventListener("click", ajoutPanier);
