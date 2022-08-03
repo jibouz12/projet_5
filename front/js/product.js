@@ -35,6 +35,15 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
     let descriptionProduit = document.getElementById("description");
     descriptionProduit.textContent = ""+ value.description + "";
 
+//récupérer les couleurs et les ajouter au menu déroulant
+    let couleurs = value.colors;
+        for (let i of couleurs) {
+            let couleursParent = document.getElementById("colors");
+            let couleursEnfant = document.createElement("option");
+            couleursParent.appendChild(couleursEnfant);
+            couleursEnfant.setAttribute("value", ""+ i +"");
+            couleursEnfant.innerHTML = ""+ i +"";
+        }
     })
     .catch(function(err) {
         console.log("Une erreur est survenue"); 
