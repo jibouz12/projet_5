@@ -1,5 +1,6 @@
-// récupérer du localStorage
-function getFromLocal() {
+//récupérer panier du localStorage et l'afficher
+//récupérer des infos produits à partir de l'API
+function recupPanier() {
     let canap = localStorage.getItem("canap");
     let tableauRecap = JSON.parse(canap);
     if (canap == null) {
@@ -82,5 +83,5 @@ function getFromLocal() {
         return tableauRecap;
     }
 }
-window.onload = getFromLocal;
+window.onload = recupPanier;
 
