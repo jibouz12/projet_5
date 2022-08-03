@@ -1,8 +1,4 @@
-/** 
- * récupérer les produits avec requête de type GET 
- * @param { String } url
- * @return { Promise }
- */ 
+// récupérer les produits avec requête de type GET 
 fetch('http://localhost:3000/api/products')
   .then(function(res) {
     if (res.ok) {
