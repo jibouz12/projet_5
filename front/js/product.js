@@ -1,24 +1,36 @@
-// récupérer l'url de la page
-var adresse = new URL(window.location.href);
+// récupérer l'url de la page et id du produit
+let adresse = new URL(window.location.href);
+let idProduit = adresse.searchParams.get("id");
+
+// récupérer les infos du produit avec requête de type GET 
+fetch('http://localhost:3000/api/products/'+ idProduit)
+    .then(function(res) {
+        if (res.ok) {
+            return res.json();
+        }
+    })
+    .then(function(value) {
 
 //ajouter image produit
-let imageProduit = document.createElement("img");
-let imageProduitParent = document.querySelector(".item__img");
-imageProduitParent.appendChild(imageProduit);
-imageProduit.setAttribute("src", ""+ adresse.searchParams.get("imageUrl") +"");
-imageProduit.setAttribute("alt", ""+ adresse.searchParams.get("altTxt") +"");
-
+    let imageProduit = document.createElement("img");
+    let imageProduitParent = document.getElementsByClassName("item__img")[0];
+    imageProduitParent.appendChild(imageProduit);
+    imageProduit.setAttribute("src", ""+ value.imageUrl +"");
+    imageProduit.setAttribute("alt", ""+ value.altTxt +"");
 
 //ajouter nom produit
-let nomProduit = document.getElementById("title");
-nomProduit.textContent = ""+ adresse.searchParams.get("name") + "";
+    let nomProduit = document.getElementById("title");
+    nomProduit.textContent = ""+ value.name + "";
 
 //ajouter prix produit
-let prixProduit = document.getElementById("price");
-prixProduit.textContent = ""+ adresse.searchParams.get("price") + "";
+    let prixProduit = document.getElementById("price");
+    prixProduit.textContent = ""+ value.price + "";
 
 //ajouter description produit
-let descriptionProduit = document.getElementById("description");
-descriptionProduit.textContent = ""+ adresse.searchParams.get("description") + "";
+    let descriptionProduit = document.getElementById("description");
+    descriptionProduit.textContent = ""+ value.description + "";
 
-
+    })
+    .catch(function(err) {
+        console.log("Une erreur est survenue"); 
+    });
