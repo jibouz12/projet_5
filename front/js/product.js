@@ -2,7 +2,12 @@
 let adresse = new URL(window.location.href);
 let idProduit = adresse.searchParams.get("id");
 
-// récupérer les infos du produit avec requête de type GET 
+/** 
+ * récupérer les infos du produit avec requête de type GET
+ * @param { String } url
+ * @param { Object } idProduit
+ * @return { Promise }
+ */  
 fetch('http://localhost:3000/api/products/'+ idProduit)
     .then(function(res) {
         if (res.ok) {
