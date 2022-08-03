@@ -79,7 +79,7 @@ function ajoutPanier(eventClic) {
         let produit = {
             id : idProduit, 
             color : document.getElementById('colors').value,
-            quantity : document.getElementById('quantity').value
+            quantity : parseInt(document.getElementById('quantity').value)
         }
         canap.push(produit);
     }
