@@ -42,7 +42,7 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
             let couleursEnfant = document.createElement("option");
             couleursParent.appendChild(couleursEnfant);
             couleursEnfant.setAttribute("value", ""+ i +"");
-            couleursEnfant.innerHTML = ""+ i +"";
+            couleursEnfant.textContent = ""+ i +"";
         }
     })
     .catch(function(err) {
