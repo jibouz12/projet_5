@@ -1,18 +1,18 @@
+let canap = localStorage.getItem("canap");
+let tableauRecap = JSON.parse(canap);
 //récupérer panier du localStorage et l'afficher
 //récupérer des infos produits à partir de l'API
 function recupPanier() {
-    let canap = localStorage.getItem("canap");
-    let tableauRecap = JSON.parse(canap);
     if (canap == null) {
         return [];
     }else {
         for (let i of tableauRecap) {
-            let cartArticle = document.createElement("article");
+            let cardArticle = document.createElement("article");
             let parent = document.getElementById("cart__items");
-            parent.appendChild(cartArticle);
-            cartArticle.setAttribute("class", "cart__item");
-            cartArticle.setAttribute("data-id", ""+ i.id +"");
-            cartArticle.setAttribute("data-color", ""+ i.color +"");
+            parent.appendChild(cardArticle);
+            cardArticle.setAttribute("class", "cart__item");
+            cardArticle.setAttribute("data-id", ""+ i.id +"");
+            cardArticle.setAttribute("data-color", ""+ i.color +"");
             fetch('http://localhost:3000/api/products/'+ i.id)
                 .then(function(res) {
                     if (res.ok) {
@@ -21,7 +21,7 @@ function recupPanier() {
                 })
                 .then(function(value) {
                     let cardImage = document.createElement("div");
-                    cartArticle.appendChild(cardImage);
+                    cardArticle.appendChild(cardImage);
                     cardImage.setAttribute("class", "cart__item__img");
 
                     let cardImageEnfant = document.createElement("img");
@@ -30,7 +30,7 @@ function recupPanier() {
                     cardImageEnfant.setAttribute("alt", ""+ value.altTxt +"");
 
                     let cardContent = document.createElement("div");
-                    cartArticle.appendChild(cardContent);
+                    cardArticle.appendChild(cardContent);
                     cardContent.setAttribute("class", "cart__item__content");
 
                     let cardDescription = document.createElement("div");

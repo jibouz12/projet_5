@@ -15,7 +15,24 @@ fetch('http://localhost:3000/api/products')
     let card = document.createElement("a");
     cardParent.appendChild(card);
     card.setAttribute("href", "./product.html?id="+ i._id); 
-    card.innerHTML = '<article><img src="'+ i.imageUrl +'"alt="'+ i.altTxt +'"><h3 class="productName">'+ i.name +'</h3><p class="productDescription">'+ i.description +'</p></article>';
+
+    let cardArticle = document.createElement("article");
+    card.appendChild(cardArticle);
+
+    let cardImage = document.createElement("img");
+    cardArticle.appendChild(cardImage);
+    cardImage.setAttribute("src", ""+ i.imageUrl +"");
+    cardImage.setAttribute("alt", ""+ i.altTxt +"");
+
+    let cardName = document.createElement("h3");
+    cardArticle.appendChild(cardName);
+    cardName.setAttribute("class", "productName");
+    cardName.innerText = ""+ i.name +"";
+
+    let cardDescription = document.createElement("p");
+    cardArticle.appendChild(cardDescription);
+    cardDescription.setAttribute("class", "productDescription");
+    cardDescription.innerText = ""+ i.description +"";
     }
   })
   .catch(function(err) {
