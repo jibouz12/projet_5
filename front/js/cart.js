@@ -4,7 +4,9 @@ let sum = 0;
 
 /**
  * récupérer panier du localStorage et l'afficher
- * @returns tableau panier
+ * utiliser l'API avec id de chaque produit pour récupérer ses infos
+ * intégrer toutes les infos dans le HTML
+ * @returns fonctions prixTotal() et quantiteTotale()
  */
 function recupPanier() {
     if (canap == null) {
@@ -87,7 +89,7 @@ function recupPanier() {
         return prixTotal(), quantiteTotale();
     }
 }
-window.onload = recupPanier;
+window.onload = recupPanier();
 
 /**
  * calcul d'une somme

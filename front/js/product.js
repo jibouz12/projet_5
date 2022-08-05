@@ -44,19 +44,21 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
         console.log("Une erreur est survenue"); 
     });
 
-// gestion du panier 
+// partie gestion du panier 
 let canap = [];
 
-// 
 /**
  * sauvegarder panier dans localStorage
- * @param {Objet} canap - l'objet qu'on sauvegarde
+ * @param {Objet} canap - l'objet qu'on sauvegarde : panier
  */
 function saveLocal(canap) {
     localStorage.setItem("canap", JSON.stringify(canap));
 }
 
-// récupérer du localStorage
+/**
+ * récupérer le panier du localStorage
+ * @returns localStorage : panier
+ */
 function getFromLocal() {
     let canap = localStorage.getItem("canap");
     if (canap == null) {
@@ -66,8 +68,12 @@ function getFromLocal() {
     }
 }
 
-// ajout au panier
-function ajoutPanier(eventClic) {
+/**
+ * ajout au panier
+ * si le produit est déjà éxistant dans le panier, on ajoute la quantité souhaitée à ce produit
+ * si le produit n'est pas encore dans le panier, on l'ajoute
+ */
+function ajoutPanier() {
     let canap = getFromLocal();
     let couleurSelect = document.getElementById('colors').value;
     let produitExistant = canap.find(p => p.id == idProduit & p.color == couleurSelect);
