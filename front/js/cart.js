@@ -1,7 +1,11 @@
 let canap = localStorage.getItem("canap");
 let tableauRecap = JSON.parse(canap);
-//récupérer panier du localStorage et l'afficher
-//récupérer des infos produits à partir de l'API
+let sum = 0;
+
+/**
+ * récupérer panier du localStorage et l'afficher
+ * @returns tableau panier
+ */
 function recupPanier() {
     if (canap == null) {
         return [];
@@ -78,10 +82,49 @@ function recupPanier() {
                     cardDelSet.appendChild(cardDel);
                     cardDel.setAttribute("class", "deleteItem");
                     cardDel.innerText = "Supprimer";
-                })
+                })   
         }
-        return tableauRecap;
+        return prixTotal(), quantiteTotale();
     }
 }
 window.onload = recupPanier;
 
+/**
+ * calcul d'une somme
+ * @param {Object} produit - calcule la somme des produits
+ */
+function somme(produit) {
+    sum += produit;
+}
+
+/**
+ * calcul du prix total du panier
+ */
+function prixTotal() { 
+    for (let p of tableauRecap) {
+        fetch('http://localhost:3000/api/products/'+ p.id)
+        .then(function(res) {
+            if (res.ok) {
+                return res.json();
+            }
+        })
+        .then (function(jb) {
+            let jb1 = jb.price * p.quantity;    
+            somme(jb1);
+            document.getElementById("totalPrice").innerText = ""+ sum +"";
+        })
+    }
+
+}
+
+/**
+ * calcul du nombre total d'articles dans le panier
+ */
+function quantiteTotale() { 
+    let sommeArticles = 0; 
+    tableauRecap.forEach(element => {
+        sommeArticles += element.quantity;
+        let nombreArticles = document.getElementById("totalQuantity");
+        nombreArticles.innerText = ""+ sommeArticles +"";
+    })
+}

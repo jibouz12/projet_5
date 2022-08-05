@@ -50,7 +50,7 @@ let canap = [];
 // 
 /**
  * sauvegarder panier dans localStorage
- * @param {Objet} canap l'objet qu'on sauvegarde
+ * @param {Objet} canap - l'objet qu'on sauvegarde
  */
 function saveLocal(canap) {
     localStorage.setItem("canap", JSON.stringify(canap));
