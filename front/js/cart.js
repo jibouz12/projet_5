@@ -1,6 +1,6 @@
 let canap = localStorage.getItem("canap");
 let tableauRecap = JSON.parse(canap);
-let sum = 0;
+window.onload = recupPanier();
 
 /**
  * récupérer panier du localStorage et l'afficher
@@ -75,6 +75,7 @@ function recupPanier() {
                     quantiteSet.setAttribute("min", "1");
                     quantiteSet.setAttribute("max", "100");
                     quantiteSet.setAttribute("value", ""+ i.quantity +"");
+                    quantiteSet.addEventListener("change", (changerQuantite));
 
                     let cardDelSet = document.createElement("div");
                     cardSet.appendChild(cardDelSet);
@@ -84,25 +85,18 @@ function recupPanier() {
                     cardDelSet.appendChild(cardDel);
                     cardDel.setAttribute("class", "deleteItem");
                     cardDel.innerText = "Supprimer";
+                    cardDel.addEventListener("click", (suppressionElement));
                 })   
         }
         return prixTotal(), quantiteTotale();
     }
-}
-window.onload = recupPanier();
-
-/**
- * calcul d'une somme
- * @param {Object} produit - calcule la somme des produits
- */
-function somme(produit) {
-    sum += produit;
 }
 
 /**
  * calcul du prix total du panier
  */
 function prixTotal() { 
+    let prixFinal = 0;
     for (let p of tableauRecap) {
         fetch('http://localhost:3000/api/products/'+ p.id)
         .then(function(res) {
@@ -110,13 +104,14 @@ function prixTotal() {
                 return res.json();
             }
         })
-        .then (function(jb) {
-            let jb1 = jb.price * p.quantity;    
-            somme(jb1);
-            document.getElementById("totalPrice").innerText = ""+ sum +"";
+        .then (function(i) {
+                let recupPrix = i.price;  
+                let recupQuantite = p.quantity;
+                prixFinal += recupPrix * recupQuantite;
+                let totalPrix = document.getElementById("totalPrice");
+                totalPrix.innerText = ""+ prixFinal +"";
         })
     }
-
 }
 
 /**
@@ -130,3 +125,28 @@ function quantiteTotale() {
         nombreArticles.innerText = ""+ sommeArticles +"";
     })
 }
+
+/**
+ * fonction changement quantité articles
+ */
+function changerQuantite() {
+// changer value dans le DOM
+    let quantiteNum = parseInt(this.value);
+    this.setAttribute("value", quantiteNum);
+
+// récupérer id et couleur de l'objet sélectionné
+    divArticle = this.closest("article");
+    recupId = divArticle.dataset.id;
+    recupCouleur = divArticle.dataset.color;
+
+// changer quantité dans le localStorage
+    let produitExistant = tableauRecap.find(p => p.id == recupId & p.color == recupCouleur);
+    produitExistant.quantity = quantiteNum;
+    localStorage.setItem("canap", JSON.stringify(tableauRecap));
+
+// calcul quantité totale et prix total du panier
+    prixTotal();
+    quantiteTotale();
+} 
+
+
