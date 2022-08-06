@@ -149,4 +149,18 @@ function changerQuantite() {
     quantiteTotale();
 } 
 
-
+/**
+ * supprimer l'élément 
+ */
+function suppressionElement() {
+    let divArticle = this.closest("article");
+    recupId = divArticle.dataset.id;
+    recupCouleur = divArticle.dataset.color;
+    let produitExistant = tableauRecap.find(p => p.id == recupId & p.color == recupCouleur);
+    tableauRecap = tableauRecap.filter(function(f) { return f != produitExistant });
+    localStorage.setItem("canap", JSON.stringify(tableauRecap));
+    divArticle.remove();   
+    prixTotal();
+    quantiteTotale();
+    location.reload();
+}
