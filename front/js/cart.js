@@ -133,7 +133,7 @@ function changerQuantite() {
 // changer value dans le DOM
     let quantiteNum = parseInt(this.value);
     this.setAttribute("value", quantiteNum);
-
+    
 // récupérer id et couleur de l'objet sélectionné
     divArticle = this.closest("article");
     recupId = divArticle.dataset.id;
@@ -163,4 +163,73 @@ function suppressionElement() {
     prixTotal();
     quantiteTotale();
     location.reload();
+}
+
+// récupérer et analyser les données saisies par l'utilisateur
+let form = document.getElementsByTagName("form")[0];
+
+form.firstName.addEventListener("change", function() {
+    validerPrenom(this);
+});
+form.lastName.addEventListener("change", function() {
+    validerNom(this);
+});
+form.address.addEventListener("change", function() {
+    validerAdresse(this);
+});
+form.city.addEventListener("change", function() {
+    validerVille(this);
+});
+form.email.addEventListener("change", function() {
+    validerEmail(this);
+});
+
+function validerPrenom (e) {
+    let prenomRegex = /[a-zA-Z]/;
+    let testPrenom = prenomRegex.test(e.value);
+    if (testPrenom) {
+        document.getElementById("firstNameErrorMsg").innerText = "";
+    }else {
+        document.getElementById("firstNameErrorMsg").innerText = "Le prénom est incorrect.";
+    }
+}
+
+function validerNom (e) {
+    let nomRegex = /[a-zA-Z]/;
+    let testNom = nomRegex.test(e.value);
+    if (testNom) {
+        document.getElementById("lastNameErrorMsg").innerText = "";
+    }else {
+        document.getElementById("lastNameErrorMsg").innerText = "Le nom est incorrect.";
+    }
+}
+
+function validerAdresse (e) {
+    let adresseRegex = /[0-9bis]+[\s]+[a-zA-Z0-9\s,.'-]/;
+    let testAdresse = adresseRegex.test(e.value);
+    if (testAdresse) {
+        document.getElementById("addressErrorMsg").innerText = "";
+    }else {
+        document.getElementById("addressErrorMsg").innerText = "L'adresse est incorrecte.";
+    }
+}
+
+function validerVille (e) {
+    let villeRegex = /[a-zA-Z\s,.'-]/;
+    let testVille = villeRegex.test(e.value);
+    if (testVille) {
+        document.getElementById("cityErrorMsg").innerText = "";
+    }else {
+        document.getElementById("cityErrorMsg").innerText = "La ville est incorrecte.";
+    }
+}
+
+function validerEmail (e) {
+    let emailRegex = /[a-zA-Z1-9.-_]+[@]+[a-zA-Z1-9.-_]+[.]+[a-z]/;
+    let testEmail = emailRegex.test(e.value);
+    if (testEmail) {
+        document.getElementById("emailErrorMsg").innerText = "";
+    }else {
+        document.getElementById("emailErrorMsg").innerText = "L'adresse email est incorrecte.";
+    }
 }
