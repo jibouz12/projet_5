@@ -92,6 +92,7 @@ function recupPanier() {
     }
 }
 
+///////////////////////////////////////
 /**
  * calcul du prix total du panier
  */
@@ -114,6 +115,7 @@ function prixTotal() {
     }
 }
 
+///////////////////////////////////////////
 /**
  * calcul du nombre total d'articles dans le panier
  */
@@ -126,6 +128,7 @@ function quantiteTotale() {
     })
 }
 
+////////////////////////////////////////
 /**
  * fonction changement quantité articles
  */
@@ -149,6 +152,7 @@ function changerQuantite() {
     quantiteTotale();
 } 
 
+////////////////////////////////////////
 /**
  * supprimer l'élément 
  */
@@ -165,73 +169,116 @@ function suppressionElement() {
     location.reload();
 }
 
+/////////////////////////////////
 // récupérer et analyser les données saisies par l'utilisateur
-let contact = {
-    firstName : "",
-    lastName : "",
-    address : "",
-    city : "",
-    email : ""
-}
-function validation () {
-    let form = document.getElementsByTagName("form")[0];
-    form.addEventListener("change", function() {
-        valider(this.firstName, this.lastName, this.address, this.city, this.email);
-    });
-    function valider () {
-        let Regex = /\d/;
-        let adresseRegex = /[0-9bis]+[\s]+[a-zA-Z0-9\s,.'-]/;
-        let emailRegex = /[a-zA-Z1-9.-_]+[@]+[a-zA-Z1-9.-_]+[.]+[a-z]/;
-        let testPrenom = Regex.test(form.firstName.value);
-        let testNom = Regex.test(form.lastName.value);
-        let testAdresse = adresseRegex.test(form.address.value);
-        let testVille = Regex.test(form.city.value);
-        let testEmail = emailRegex.test(form.email.value);
+let regex = /\d/;
+let adresseRegex = /[0-9bis]+[\s]+[a-zA-Z0-9\s,.'-]/;
+let emailRegex = /[a-zA-Z1-9.-_]+[@]+[a-zA-Z1-9.-_]+[.]+[a-z]/;
 
-        if (testPrenom == false && form.firstName.value != "") {
-            contact.firstName = form.firstName.value;
-            document.getElementById("firstNameErrorMsg").innerText = "";
-        }else {
-            contact.firstName = "";
-            document.getElementById("firstNameErrorMsg").innerText = "Le prénom est incorrect.";
-        }
-        if (testNom == false && form.lastName.value != "") {
-            contact.lastName = form.lastName.value;
-            document.getElementById("lastNameErrorMsg").innerText = "";
-        }else {
-            contact.lastName = "";
-            document.getElementById("lastNameErrorMsg").innerText = "Le nom est incorrect.";
-        }
-        if (testAdresse) {
-            contact.address = form.address.value;
-            document.getElementById("addressErrorMsg").innerText = "";
-        }else {
-            contact.address = "";
-            document.getElementById("addressErrorMsg").innerText = "L'adresse est incorrecte.";
-        }
-        if (testVille == false && form.city.value != "") {
-            contact.city = form.city.value;
-            document.getElementById("cityErrorMsg").innerText = "";
-        }else {
-            contact.city = "";
-            document.getElementById("cityErrorMsg").innerText = "La ville est incorrecte.";
-        }
-        if (testEmail) {
-            contact.email = form.email.value;
-            document.getElementById("emailErrorMsg").innerText = "";
-        }else {
-            contact.email = "";
-            document.getElementById("emailErrorMsg").innerText = "L'adresse email est incorrecte.";
-        }
-    }
-    if ((contact.firstName && contact.lastName && contact.address && contact.city && contact.email) != "") {
-        console.log(contact);
-        
+let form = document.getElementsByTagName("form")[0];
+form.firstName.addEventListener("change", function() {
+    validerPrenom()
+});
+form.lastName.addEventListener("change", function() {
+    validerNom()
+});
+form.address.addEventListener("change", function() {
+    validerAdresse()
+});
+form.city.addEventListener("change", function() {
+    validerVille()
+});
+form.email.addEventListener("change", function() {
+    validerEmail()
+});
+
+function validerPrenom() {
+   let prenom = form.firstName.value;
+   if (regex.test(prenom) == false) {
+    document.getElementById("firstNameErrorMsg").innerText = "";
+        return true;
+   }else {
+    document.getElementById("firstNameErrorMsg").innerText = "Le prénom est incorrect.";
+        return false;
+   }
+}
+
+function validerNom() {
+    let nom = form.lastName.value;
+    if (regex.test(nom) == false) {
+     document.getElementById("lastNameErrorMsg").innerText = "";
+         return true;
     }else {
+     document.getElementById("lastNameErrorMsg").innerText = "Le nom est incorrect.";
+         return false;
+    }
+ }
+
+ function validerAdresse() {
+    let adresse = form.address.value;
+    if (adresseRegex.test(adresse)) {
+     document.getElementById("addressErrorMsg").innerText = "";
+         return true;
+    }else {
+     document.getElementById("addressErrorMsg").innerText = "L'adresse est incorrecte.";
+         return false;
+    }
+ }
+
+ function validerVille() {
+    let ville = form.city.value;
+    if (regex.test(ville) == false) {
+     document.getElementById("cityErrorMsg").innerText = "";
+         return true;
+    }else {
+     document.getElementById("cityErrorMsg").innerText = "La ville est incorrecte.";
+         return false;
+    }
+ }
+
+ function validerEmail() {
+    let email = form.email.value;
+    if (emailRegex.test(email)) {
+     document.getElementById("emailErrorMsg").innerText = "";
+         return true;
+    }else {
+     document.getElementById("emailErrorMsg").innerText = "L'adresse email est incorrecte.";
+         return false;
+    }
+ }
+ 
+function send() {
+    if ((validerPrenom() && validerNom() && validerAdresse() && validerVille() && validerEmail()) === true && tableauRecap.length > 0) {
+        let contact = {
+            firstName : form.firstName.value,
+            lastName : form.lastName.value,
+            address : form.address.value,
+            city : form.city.value,
+            email : form.email.value
+        }
+        let donneesAEnvoyer = {
+            "contact" : contact,
+            "product-ID" : tableauRecap
+        }
+        fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(donneesAEnvoyer)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            window.location.href = "./confirmation.html?id="+ data.orderId;
+        })
+        .catch(function (err) {
+            console.log(err);
+            alert("erreur");
+        }); 
+    }else {
+        alert("Veuillez remplir le formulaire correctement.");
         return false;
     }
 }
-
-  
-  
-
+document.getElementById("order").addEventListener("click", send); 
