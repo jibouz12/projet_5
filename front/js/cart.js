@@ -280,7 +280,7 @@ function send(e) {
             alert("erreur");
         }); 
     }else {
-        alert("Veuillez remplir le formulaire correctement.");
+        alert("Veuillez sélectionner au moins un produit et remplir le formulaire correctement.");
         return false;
     }
 }
