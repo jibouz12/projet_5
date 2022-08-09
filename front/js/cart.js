@@ -169,6 +169,7 @@ function suppressionElement() {
     location.reload();
 }
 
+////////////////////////////////
 /////////////////////////////////
 // récupérer et analyser les données saisies par l'utilisateur
 let regex = /\d/;
@@ -247,6 +248,10 @@ function validerNom() {
     }
  }
 
+/////////////////////////////////
+// Vérifier que l'utilisateur remplisse correctement le formulaire
+// Vérifier que le panier n'est pas vide
+// Envoyer infos à l'API (POST)
 function send(e) {
     e.preventDefault();
     if ((validerPrenom() && validerNom() && validerAdresse() && validerVille() && validerEmail()) === true && tableauRecap.length > 0) {
