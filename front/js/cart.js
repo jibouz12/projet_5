@@ -172,7 +172,7 @@ function suppressionElement() {
 /////////////////////////////////
 // récupérer et analyser les données saisies par l'utilisateur
 let regex = /\d/;
-let adresseRegex = /[0-9bis]+[\s]+[a-zA-Z0-9\s,.'-]/;
+let adresseRegex = /[0-9bis,]+[\s]+[a-zA-Z0-9\s,.'-]/;
 let emailRegex = /[a-zA-Z1-9.-_]+[@]+[a-zA-Z1-9.-_]+[.]+[a-z]/;
 
 let form = document.getElementsByTagName("form")[0];
@@ -246,8 +246,9 @@ function validerNom() {
          return false;
     }
  }
- 
-function send() {
+
+function send(e) {
+    e.preventDefault();
     if ((validerPrenom() && validerNom() && validerAdresse() && validerVille() && validerEmail()) === true && tableauRecap.length > 0) {
         let contact = {
             firstName : form.firstName.value,
@@ -256,20 +257,21 @@ function send() {
             city : form.city.value,
             email : form.email.value
         }
-        let donneesAEnvoyer = {
-            "contact" : contact,
-            "product-ID" : tableauRecap
+        let products = [];
+        for (let i of tableauRecap) {
+            let productId = i.id;
+            products.push(productId)  
         }
+        let donneesAEnvoyer = {contact, products};
         fetch("http://localhost:3000/api/products/order", {
             method: "POST",
             headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
             },
             body: JSON.stringify(donneesAEnvoyer)
         })
         .then((res) => res.json())
-        .then((data) => {
+        .then((data) => {         
             window.location.href = "./confirmation.html?id="+ data.orderId;
         })
         .catch(function (err) {
