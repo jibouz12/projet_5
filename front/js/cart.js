@@ -1,5 +1,5 @@
-let canap = localStorage.getItem("canap");
-let tableauRecap = JSON.parse(canap);
+let panierLocal = localStorage.getItem("panierLocal");
+let tableauRecap = JSON.parse(panierLocal);
 window.onload = recupPanier();
 
 /**
@@ -9,7 +9,7 @@ window.onload = recupPanier();
  * @returns fonctions prixTotal() et quantiteTotale()
  */
 function recupPanier() {
-    if (canap == null) {
+    if (panierLocal == null) {
         return [];
     }else {
         for (let i of tableauRecap) {
@@ -145,7 +145,7 @@ function changerQuantite() {
 // changer quantité dans le localStorage
     let produitExistant = tableauRecap.find(p => p.id == recupId & p.color == recupCouleur);
     produitExistant.quantity = quantiteNum;
-    localStorage.setItem("canap", JSON.stringify(tableauRecap));
+    localStorage.setItem("panierLocal", JSON.stringify(tableauRecap));
 
 // calcul quantité totale et prix total du panier
     prixTotal();
@@ -162,7 +162,7 @@ function suppressionElement() {
     recupCouleur = divArticle.dataset.color;
     let produitExistant = tableauRecap.find(p => p.id == recupId & p.color == recupCouleur);
     tableauRecap = tableauRecap.filter(function(f) { return f != produitExistant });
-    localStorage.setItem("canap", JSON.stringify(tableauRecap));
+    localStorage.setItem("panierLocal", JSON.stringify(tableauRecap));
     divArticle.remove();   
     prixTotal();
     quantiteTotale();
@@ -272,6 +272,7 @@ function send(e) {
         })
         .then((res) => res.json())
         .then((data) => {         
+            localStorage.clear();
             window.location.href = "./confirmation.html?id="+ data.orderId;
         })
         .catch(function (err) {

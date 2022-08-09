@@ -44,15 +44,16 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
         console.log("Une erreur est survenue"); 
     });
 
+///////////////////////////////////////
 // partie gestion du panier 
-let canap = [];
+let panierLocal = [];
 
 /**
  * sauvegarder panier dans localStorage
- * @param {Objet} canap - l'objet qu'on sauvegarde : panier
+ * @param {Objet} panierLocal - l'objet qu'on sauvegarde : panier
  */
-function saveLocal(canap) {
-    localStorage.setItem("canap", JSON.stringify(canap));
+function saveLocal(panierLocal) {
+    localStorage.setItem("panierLocal", JSON.stringify(panierLocal));
 }
 
 /**
@@ -60,11 +61,11 @@ function saveLocal(canap) {
  * @returns localStorage : panier
  */
 function getFromLocal() {
-    let canap = localStorage.getItem("canap");
-    if (canap == null) {
+    let panierLocal = localStorage.getItem("panierLocal");
+    if (panierLocal == null) {
         return [];
     }else {
-        return JSON.parse(canap);
+        return JSON.parse(panierLocal);
     }
 }
 
@@ -74,9 +75,9 @@ function getFromLocal() {
  * si le produit n'est pas encore dans le panier, on l'ajoute
  */
 function ajoutPanier() {
-    let canap = getFromLocal();
+    let panierLocal = getFromLocal();
     let couleurSelect = document.getElementById('colors').value;
-    let produitExistant = canap.find(p => p.id == idProduit & p.color == couleurSelect);
+    let produitExistant = panierLocal.find(p => p.id == idProduit & p.color == couleurSelect);
     if (produitExistant != undefined) {
         let quantiteNum = parseInt(produitExistant.quantity);
         let quantiteNumAdd = parseInt(document.getElementById('quantity').value);
@@ -87,9 +88,9 @@ function ajoutPanier() {
             color : document.getElementById('colors').value,
             quantity : parseInt(document.getElementById('quantity').value)
         }
-        canap.push(produit);
+        panierLocal.push(produit);
     }
-    saveLocal(canap);
+    saveLocal(panierLocal);
 }
 
 // run fonction au clic
