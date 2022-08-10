@@ -4,7 +4,7 @@ let idProduit = adresse.searchParams.get("id");
 
 /////////////////////////
 // récupérer les infos du produit avec requête de type GET
-fetch('http://localhost:3000/api/products/'+ idProduit)
+fetch('http://localhost:3000/api/products/' + idProduit)
     .then(function(res) {
         if (res.ok) {
             return res.json();
@@ -17,23 +17,23 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
     let imageProduit = document.createElement("img");
     let imageProduitParent = document.getElementsByClassName("item__img")[0];
     imageProduitParent.appendChild(imageProduit);
-    imageProduit.setAttribute("src", ""+ value.imageUrl +"");
-    imageProduit.setAttribute("alt", ""+ value.altTxt +"");
+    imageProduit.setAttribute("src", "" + value.imageUrl);
+    imageProduit.setAttribute("alt", "" + value.altTxt);
 
 //////////////////////////////
 //ajouter nom produit
     let nomProduit = document.getElementById("title");
-    nomProduit.textContent = ""+ value.name + "";
+    nomProduit.textContent = "" + value.name;
 
 ////////////////////////////////
 //ajouter prix produit
     let prixProduit = document.getElementById("price");
-    prixProduit.textContent = ""+ value.price + "";
+    prixProduit.textContent = "" + value.price;
 
 ////////////////////////////////
 //ajouter description produit
     let descriptionProduit = document.getElementById("description");
-    descriptionProduit.textContent = ""+ value.description + "";
+    descriptionProduit.textContent = "" + value.description;
 
 //////////////////////////////////
 //récupérer les couleurs et les ajouter au menu déroulant
@@ -42,8 +42,8 @@ fetch('http://localhost:3000/api/products/'+ idProduit)
             let couleursParent = document.getElementById("colors");
             let couleursEnfant = document.createElement("option");
             couleursParent.appendChild(couleursEnfant);
-            couleursEnfant.setAttribute("value", ""+ i +"");
-            couleursEnfant.textContent = ""+ i +"";
+            couleursEnfant.setAttribute("value", "" + i);
+            couleursEnfant.textContent = "" + i;
         }
     })
     .catch(function(err) {
@@ -57,21 +57,21 @@ let panierLocal = [];
 
 /**
  * sauvegarder panier dans localStorage
- * @param {Objet} panierLocal - l'objet qu'on sauvegarde : panier
+ * @param {Objet} panier - l'objet qu'on sauvegarde : panier
  */
-function saveLocal(panierLocal) {
-    localStorage.setItem("panierLocal", JSON.stringify(panierLocal));
+function saveLocalStorage(panier) {
+    localStorage.setItem("panierLocal", JSON.stringify(panier));
 }
 
 /**
  * récupérer le panier du localStorage
  * @returns localStorage : panier
  */
-function getFromLocal() {
+function getFromLocalStorage() {
     let panierLocal = localStorage.getItem("panierLocal");
     if (panierLocal == null) {
         return [];
-    }else {
+    } else {
         return JSON.parse(panierLocal);
     }
 }
@@ -82,22 +82,30 @@ function getFromLocal() {
  * si le produit n'est pas encore dans le panier, on l'ajoute
  */
 function ajoutPanier() {
-    let panierLocal = getFromLocal();
+    let panierLocal = getFromLocalStorage();
     let couleurSelect = document.getElementById('colors').value;
-    let produitExistant = panierLocal.find(p => p.id == idProduit & p.color == couleurSelect);
+    let produitExistant = panierLocal.find(p => p.id == idProduit && p.color == couleurSelect);
     if (produitExistant != undefined) {
         let quantiteNum = parseInt(produitExistant.quantity);
         let quantiteNumAdd = parseInt(document.getElementById('quantity').value);
-        produitExistant.quantity = quantiteNum + quantiteNumAdd;
-    }else {
+        if (quantiteNumAdd > 0) {
+            produitExistant.quantity = quantiteNum + quantiteNumAdd;   
+        } else {
+            alert("La quantité doit être supérieure ou égale à 1.")
+        }
+    } else {
         let produit = {
             id : idProduit, 
             color : document.getElementById('colors').value,
             quantity : parseInt(document.getElementById('quantity').value)
         }
-        panierLocal.push(produit);
+        if (produit.quantity > 0) {
+            panierLocal.push(produit);
+        } else {
+            alert("La quantité doit être supérieure ou égale à 1.");
+        }
     }
-    saveLocal(panierLocal);
+    saveLocalStorage(panierLocal);
 }
 
 // run fonction au clic

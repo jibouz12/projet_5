@@ -10,6 +10,8 @@ window.onload = recupPanier();
  */
 function recupPanier() {
     if (panierLocal == null) {
+        document.getElementById("totalPrice").innerText = "0";
+        document.getElementById("totalQuantity").innerText = "0";
         return [];
     }else {
         for (let i of tableauRecap) {
@@ -17,9 +19,9 @@ function recupPanier() {
             let parent = document.getElementById("cart__items");
             parent.appendChild(cardArticle);
             cardArticle.setAttribute("class", "cart__item");
-            cardArticle.setAttribute("data-id", ""+ i.id +"");
-            cardArticle.setAttribute("data-color", ""+ i.color +"");
-            fetch('http://localhost:3000/api/products/'+ i.id)
+            cardArticle.setAttribute("data-id", "" + i.id);
+            cardArticle.setAttribute("data-color", "" + i.color);
+            fetch('http://localhost:3000/api/products/' + i.id)
                 .then(function(res) {
                     if (res.ok) {
                         return res.json();
@@ -32,8 +34,8 @@ function recupPanier() {
 
                     let cardImageEnfant = document.createElement("img");
                     cardImage.appendChild(cardImageEnfant);
-                    cardImageEnfant.setAttribute("src", ""+ value.imageUrl +"");
-                    cardImageEnfant.setAttribute("alt", ""+ value.altTxt +"");
+                    cardImageEnfant.setAttribute("src", "" + value.imageUrl);
+                    cardImageEnfant.setAttribute("alt", "" + value.altTxt);
 
                     let cardContent = document.createElement("div");
                     cardArticle.appendChild(cardContent);
@@ -45,15 +47,15 @@ function recupPanier() {
 
                     let cardName = document.createElement("h2");
                     cardDescription.appendChild(cardName);
-                    cardName.innerText = ""+ value.name +"";
+                    cardName.innerText = "" + value.name;
 
                     let cardCouleur = document.createElement("p");
                     cardDescription.appendChild(cardCouleur);
-                    cardCouleur.innerText = ""+ i.color +"";
+                    cardCouleur.innerText = "" + i.color;
 
                     let cardPrix = document.createElement("p");
                     cardDescription.appendChild(cardPrix);
-                    cardPrix.innerText = ""+ value.price +" €";
+                    cardPrix.innerText = "" + value.price + " €";
 
                     let cardSet = document.createElement("div");
                     cardContent.appendChild(cardSet);
@@ -74,7 +76,7 @@ function recupPanier() {
                     quantiteSet.setAttribute("name", "itemQuantity");
                     quantiteSet.setAttribute("min", "1");
                     quantiteSet.setAttribute("max", "100");
-                    quantiteSet.setAttribute("value", ""+ i.quantity +"");
+                    quantiteSet.setAttribute("value", "" + i.quantity);
                     quantiteSet.addEventListener("change", (changerQuantite));
 
                     let cardDelSet = document.createElement("div");
@@ -98,8 +100,10 @@ function recupPanier() {
  */
 function prixTotal() { 
     let prixFinal = 0;
+    let totalPrix = document.getElementById("totalPrice");
+    totalPrix.innerText = "0";
     for (let p of tableauRecap) {
-        fetch('http://localhost:3000/api/products/'+ p.id)
+        fetch('http://localhost:3000/api/products/' + p.id)
         .then(function(res) {
             if (res.ok) {
                 return res.json();
@@ -109,8 +113,7 @@ function prixTotal() {
                 let recupPrix = i.price;  
                 let recupQuantite = p.quantity;
                 prixFinal += recupPrix * recupQuantite;
-                let totalPrix = document.getElementById("totalPrice");
-                totalPrix.innerText = ""+ prixFinal +"";
+                totalPrix.innerText = "" + prixFinal;
         })
     }
 }
@@ -121,10 +124,11 @@ function prixTotal() {
  */
 function quantiteTotale() { 
     let sommeArticles = 0; 
+    let nombreArticles = document.getElementById("totalQuantity");
+    nombreArticles.innerText = "0";
     tableauRecap.forEach(element => {
         sommeArticles += element.quantity;
-        let nombreArticles = document.getElementById("totalQuantity");
-        nombreArticles.innerText = ""+ sommeArticles +"";
+        nombreArticles.innerText = "" + sommeArticles;
     })
 }
 
@@ -136,7 +140,7 @@ function changerQuantite() {
 // changer value dans le DOM
     let quantiteNum = parseInt(this.value);
     this.setAttribute("value", quantiteNum);
-    
+    if (quantiteNum > 0) {
 // récupérer id et couleur de l'objet sélectionné
     divArticle = this.closest("article");
     recupId = divArticle.dataset.id;
@@ -150,6 +154,9 @@ function changerQuantite() {
 // calcul quantité totale et prix total du panier
     prixTotal();
     quantiteTotale();
+    } else {
+        alert("La quantité doit être supérieure ou égale à 1.");
+    }
 } 
 
 ////////////////////////////////////////
@@ -195,10 +202,10 @@ form.email.addEventListener("change", function() {
 
 function validerPrenom() {
    let prenom = form.firstName.value;
-   if (regex.test(prenom) == false) {
+   if (!regex.test(prenom)) {
     document.getElementById("firstNameErrorMsg").innerText = "";
         return true;
-   }else {
+   } else {
     document.getElementById("firstNameErrorMsg").innerText = "Le prénom est incorrect.";
         return false;
    }
@@ -206,10 +213,10 @@ function validerPrenom() {
 
 function validerNom() {
     let nom = form.lastName.value;
-    if (regex.test(nom) == false) {
+    if (!regex.test(nom)) {
      document.getElementById("lastNameErrorMsg").innerText = "";
          return true;
-    }else {
+    } else {
      document.getElementById("lastNameErrorMsg").innerText = "Le nom est incorrect.";
          return false;
     }
@@ -220,7 +227,7 @@ function validerNom() {
     if (adresseRegex.test(adresse)) {
      document.getElementById("addressErrorMsg").innerText = "";
          return true;
-    }else {
+    } else {
      document.getElementById("addressErrorMsg").innerText = "L'adresse est incorrecte.";
          return false;
     }
@@ -228,10 +235,10 @@ function validerNom() {
 
  function validerVille() {
     let ville = form.city.value;
-    if (regex.test(ville) == false) {
+    if (!regex.test(ville)) {
      document.getElementById("cityErrorMsg").innerText = "";
          return true;
-    }else {
+    } else {
      document.getElementById("cityErrorMsg").innerText = "La ville est incorrecte.";
          return false;
     }
@@ -242,7 +249,7 @@ function validerNom() {
     if (emailRegex.test(email)) {
      document.getElementById("emailErrorMsg").innerText = "";
          return true;
-    }else {
+    } else {
      document.getElementById("emailErrorMsg").innerText = "L'adresse email est incorrecte.";
          return false;
     }
@@ -252,9 +259,9 @@ function validerNom() {
 // Vérifier que l'utilisateur remplisse correctement le formulaire
 // Vérifier que le panier n'est pas vide
 // Envoyer infos à l'API (POST)
-function send(e) {
+function creerCommande(e) {
     e.preventDefault();
-    if ((validerPrenom() && validerNom() && validerAdresse() && validerVille() && validerEmail()) === true && tableauRecap.length > 0) {
+    if ((validerPrenom() && validerNom() && validerAdresse() && validerVille() && validerEmail()) === true && tableauRecap != null && tableauRecap.length > 0) {
         let contact = {
             firstName : form.firstName.value,
             lastName : form.lastName.value,
@@ -278,15 +285,14 @@ function send(e) {
         .then((res) => res.json())
         .then((data) => {         
             localStorage.clear();
-            window.location.href = "./confirmation.html?id="+ data.orderId;
+            window.location.href = "./confirmation.html?id=" + data.orderId;
         })
-        .catch(function (err) {
+        .catch((err) => {
             console.log(err);
-            alert("erreur");
+            alert("Une erreur est survenue");
         }); 
-    }else {
-        alert("Veuillez sélectionner au moins un produit et remplir le formulaire correctement.");
-        return false;
+    } else {
+        alert("Veuillez ajouter des produits au panier et remplir le formulaire correctement.");
     }
 }
-document.getElementById("order").addEventListener("click", send); 
+document.getElementById("order").addEventListener("click", creerCommande); 

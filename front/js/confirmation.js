@@ -3,4 +3,4 @@ let adresse = new URL(window.location.href);
 let idCommande = adresse.searchParams.get("id");
 
 // Afficher le numéro de commande
-document.getElementById("orderId").innerHTML = "<br><br>"+ idCommande +"";
+document.getElementById("orderId").innerHTML = "<br><br>" + idCommande;

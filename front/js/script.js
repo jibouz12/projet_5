@@ -12,29 +12,29 @@ fetch('http://localhost:3000/api/products')
     for (let i of value) {
 
 // créer une card pour chaque produit
-    let card = document.createElement("a");
-    cardParent.appendChild(card);
-    card.setAttribute("href", "./product.html?id="+ i._id); 
+      let card = document.createElement("a");
+      cardParent.appendChild(card);
+      card.setAttribute("href", "./product.html?id="+ i._id); 
 
-    let cardArticle = document.createElement("article");
-    card.appendChild(cardArticle);
+      let cardArticle = document.createElement("article");
+      card.appendChild(cardArticle);
 
-    let cardImage = document.createElement("img");
-    cardArticle.appendChild(cardImage);
-    cardImage.setAttribute("src", ""+ i.imageUrl +"");
-    cardImage.setAttribute("alt", ""+ i.altTxt +"");
+      let cardImage = document.createElement("img");
+      cardArticle.appendChild(cardImage);
+      cardImage.setAttribute("src", ""+ i.imageUrl);
+      cardImage.setAttribute("alt", ""+ i.altTxt);
 
-    let cardName = document.createElement("h3");
-    cardArticle.appendChild(cardName);
-    cardName.setAttribute("class", "productName");
-    cardName.innerText = ""+ i.name +"";
+      let cardName = document.createElement("h3");
+      cardArticle.appendChild(cardName);
+      cardName.setAttribute("class", "productName");
+      cardName.innerText = ""+ i.name;
 
-    let cardDescription = document.createElement("p");
-    cardArticle.appendChild(cardDescription);
-    cardDescription.setAttribute("class", "productDescription");
-    cardDescription.innerText = ""+ i.description +"";
+      let cardDescription = document.createElement("p");
+      cardArticle.appendChild(cardDescription);
+      cardDescription.setAttribute("class", "productDescription");
+      cardDescription.innerText = ""+ i.description;
     }
   })
-  .catch(function(err) {
+  .catch((err) => {
     console.log("Une erreur est survenue"); 
   });
