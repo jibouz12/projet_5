@@ -12,6 +12,7 @@ function recupPanier() {
     if (panierLocal == null) {
         document.getElementById("totalPrice").innerText = "0";
         document.getElementById("totalQuantity").innerText = "0";
+        document.getElementById("ajoutS").innerText = "s";
         return [];
     }else {
         for (let i of tableauRecap) {
@@ -128,8 +129,13 @@ function quantiteTotale() {
     nombreArticles.innerText = "0";
     tableauRecap.forEach(element => {
         sommeArticles += element.quantity;
-        nombreArticles.innerText = "" + sommeArticles;
     })
+    nombreArticles.innerText = "" + sommeArticles;
+    if (sommeArticles != 1) {
+        document.getElementById("ajoutS").innerText = "s";
+    } else {
+        document.getElementById("ajoutS").innerText = "";
+    }
 }
 
 ////////////////////////////////////////
